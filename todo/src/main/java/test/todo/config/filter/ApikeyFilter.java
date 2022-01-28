@@ -20,9 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import test.todo.exception.AuthorizedException;
 import test.todo.exception.ExceptionResponse;
 
-@Component
-@WebFilter(urlPatterns = "/*")
-@Order(0)
+@WebFilter(urlPatterns = {"/todos", "/todos/*"})
 public class ApikeyFilter extends OncePerRequestFilter{
 	
 	@Value("${api-key}")
@@ -44,6 +42,8 @@ public class ApikeyFilter extends OncePerRequestFilter{
 				ObjectMapper om = new ObjectMapper();
 		        om.writeValue(response.getWriter(), exceptionResponse);
 			}
+		}else {
+			filterChain.doFilter(request, response);
 		}
 	}
 
