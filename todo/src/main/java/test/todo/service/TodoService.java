@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import test.todo.dto.TodoRequest.createRequest;
-import test.todo.dto.TodoRequest.updateRequest;
+import test.todo.dto.TodoListResponse;
+import test.todo.dto.TodoRequest.CreateRequest;
+import test.todo.dto.TodoRequest.Search;
+import test.todo.dto.TodoRequest.UpdateRequest;
 import test.todo.dto.TodoResponse;
 import test.todo.entity.Todo;
+import test.todo.repository.TodoJpaRepository;
 import test.todo.repository.TodoRepository;
 
 
@@ -20,9 +23,10 @@ import test.todo.repository.TodoRepository;
 public class TodoService {
 
 	private final TodoRepository todoRepository;
+	private final TodoJpaRepository todoJpaRepository;
 	
-	public List<TodoResponse> todoAll() {
-		return todoRepository.findAll().stream().map(t -> new TodoResponse(t)).collect(Collectors.toList());
+	public List<TodoListResponse> todoAll(Search search) {
+		return todoJpaRepository.findAll(search).stream().map(t -> new TodoListResponse(t)).collect(Collectors.toList());
 	}
 
 	public TodoResponse todoGetOne(Long id) {
@@ -30,13 +34,13 @@ public class TodoService {
 	}
 
 	@Transactional
-	public TodoResponse saveTodo(createRequest todoRequest) {
+	public TodoResponse saveTodo(CreateRequest todoRequest) {
 		return new TodoResponse(todoRepository.save(Todo.createTodo(todoRequest.getName())));
 	}
 
 	@Transactional
-	public TodoResponse updateTodo(updateRequest todoRequest) {
-		Todo getTodo = todoRepository.findById(todoRequest.getId()).orElseThrow();
+	public TodoResponse updateTodo(Long id, UpdateRequest todoRequest) {
+		Todo getTodo = todoRepository.findById(id).orElseThrow();
 		getTodo.update(todoRequest);
 		return new TodoResponse(getTodo);
 	}

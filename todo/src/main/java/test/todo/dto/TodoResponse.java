@@ -10,14 +10,15 @@ import test.todo.entity.Todo;
 public class TodoResponse {
 
 	private Long id;
+	private String name;
 	private Boolean completed;
 	private LocalDateTime completedAt;
 	private LocalDateTime createdAt;
 	private LocalDateTime updateAt;
 	
-	
 	public TodoResponse(Todo todo) {
 		this.id = todo.getId();
+		this.name = todo.getName();
 		this.completed = todo.getCompleted();
 		this.completedAt = todo.getCompletedAt();
 		this.createdAt = todo.getCreatedAt();
