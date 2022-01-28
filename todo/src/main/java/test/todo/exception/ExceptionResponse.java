@@ -15,4 +15,11 @@ public class ExceptionResponse {
 		this.status = status.value();
 		this.error = status.name();
 	}
+	
+	public ExceptionResponse(int status, String error) {
+		this.status = status;
+		this.error = error;
+	}
+
+
 }
