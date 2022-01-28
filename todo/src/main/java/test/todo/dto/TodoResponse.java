@@ -7,19 +7,14 @@ import lombok.Setter;
 import test.todo.entity.Todo;
 
 @Getter @Setter
-public class TodoResponse {
+public class TodoResponse extends TodoListResponse{
 
-	private Long id;
-	private String name;
-	private Boolean completed;
 	private LocalDateTime completedAt;
 	private LocalDateTime createdAt;
 	private LocalDateTime updateAt;
 	
 	public TodoResponse(Todo todo) {
-		this.id = todo.getId();
-		this.name = todo.getName();
-		this.completed = todo.getCompleted();
+		super(todo);
 		this.completedAt = todo.getCompletedAt();
 		this.createdAt = todo.getCreatedAt();
 		this.updateAt = todo.getUpdateAt();
