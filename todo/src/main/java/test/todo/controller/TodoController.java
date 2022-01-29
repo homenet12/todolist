@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -66,6 +67,7 @@ public class TodoController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public byte[] getTodoImg(@PathVariable Long id) throws Exception{
 		String imgUrl = todoService.todoGetOne(id).getImgUrl();
+		if(imgUrl == null) throw new NoSuchElementException("이미지가 존재하지 않습니다.");
 	    return IOUtils.toByteArray(new FileInputStream(imgUrl));
 	}
 	
