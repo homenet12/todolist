@@ -10,9 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import test.todo.common.FileHelper;
 import test.todo.dto.TodoRequest;
 
 @Entity
@@ -39,16 +42,17 @@ public class Todo {
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-	protected Todo(String name) {
-		this.name = name;
+	protected Todo(TodoRequest.CreateRequest todoRequest) {
+		this.name = todoRequest.getName();
 		this.completed = null;
 		this.completedAt = null;
 		this.createdAt = LocalDateTime.now();
 		this.updateAt = LocalDateTime.now();
+		imgUpload(todoRequest.getFile());
 	}
 	
-	public static Todo createTodo(String name) {
-		return new Todo(name);
+	public static Todo createTodo(TodoRequest.CreateRequest todoRequest) {
+		return new Todo(todoRequest);
 	}
 	
 	public void update(TodoRequest.UpdateRequest todoRequest) {
@@ -56,23 +60,33 @@ public class Todo {
 		if(todoRequest.getCompleted() != null && todoRequest.getCompleted()) {
 			complete();
 		}
+		imgUpload(todoRequest.getFile());
 		this.updateAt = LocalDateTime.now();
 	}
 	
-	public void setName(String name) {
+	private void imgUpload(MultipartFile img) {
+		if(!img.isEmpty()) {
+			this.imgUrl = FileHelper.uploadImg(img);
+		}
+	}
+	
+	private void setName(String name) {
 		if(name != null && !name.isEmpty()) {
 			this.name = name;
 		}
 	}
 	
-	public void complete() {
+	private void complete() {
 		if(!this.completed) {
 			this.completed = true;
 			this.completedAt = LocalDateTime.now();
 		}
 	}
-	
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
+
+	public void deleteImg() {
+		if(this.imgUrl != null) {
+			FileHelper.deleteImg(this.imgUrl);
+			this.imgUrl = null;
+		}
 	}
 }

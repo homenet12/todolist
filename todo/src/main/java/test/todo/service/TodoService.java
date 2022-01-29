@@ -37,11 +37,7 @@ public class TodoService {
 
 	@Transactional
 	public TodoResponse saveTodo(CreateRequest todoRequest) {
-		Todo todo = Todo.createTodo(todoRequest.getName());
-		if(!todoRequest.getFile().isEmpty()) {
-			todo.setImgUrl(FileHelper.imgUpload(todoRequest.getFile()));
-		}
-		
+		Todo todo = Todo.createTodo(todoRequest);
 		return new TodoResponse(todoRepository.save(todo));
 	}
 
@@ -55,6 +51,12 @@ public class TodoService {
 	@Transactional
 	public void deleteTodo(Long id) {
 		todoRepository.delete(todoRepository.findById(id).orElseThrow());
+	}
+
+	@Transactional
+	public void deleteTodoImg(Long id) {
+		Todo todo = todoRepository.findById(id).orElseThrow();
+		todo.deleteImg();
 	}
 
 }

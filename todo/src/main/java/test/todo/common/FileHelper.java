@@ -12,7 +12,7 @@ public class FileHelper {
 	public final static String uploadPath = "D:/fileupload";
 	private final static String[] imgPrefix = {"jpg", "png", "gif"};
 
-	public static String imgUpload(MultipartFile multipartFile) {
+	public static String uploadImg(MultipartFile multipartFile) {
 		
 		String prefix = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1, multipartFile.getOriginalFilename().length());
 		if(!Arrays.asList(imgPrefix).contains(prefix)) {
@@ -32,5 +32,10 @@ public class FileHelper {
 			e.printStackTrace();
 		}
 		return realPath;
+	}
+
+	public static void deleteImg(String imgUrl) {
+		File file = new File(imgUrl);
+		file.delete();
 	}
 }

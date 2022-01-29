@@ -34,7 +34,7 @@ public class TodoController {
 	
 	@GetMapping("/todos")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<TodoListResponse> todos(@RequestBody @Valid TodoRequest.Search search){
+	public List<TodoListResponse> getTodoAll(@RequestBody @Valid TodoRequest.Search search){
 		return todoService.todoAll(search);
 	}
 	
@@ -52,7 +52,7 @@ public class TodoController {
 	
 	@PutMapping("/todos/{id}")
 	@ResponseStatus(value = HttpStatus.OK)
-	public TodoResponse updateTodo(@PathVariable Long id, @RequestBody TodoRequest.UpdateRequest todoRequest){
+	public TodoResponse updateTodo(@PathVariable Long id, TodoRequest.UpdateRequest todoRequest){
 		return todoService.updateTodo(id, todoRequest);
 	}
 	
@@ -67,5 +67,11 @@ public class TodoController {
 	public byte[] getTodoImg(@PathVariable Long id) throws Exception{
 		String imgUrl = todoService.todoGetOne(id).getImgUrl();
 	    return IOUtils.toByteArray(new FileInputStream(imgUrl));
+	}
+	
+	@DeleteMapping(value = "/todos/{id}/img")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void deleteTodoImg(@PathVariable Long id) {
+		todoService.deleteTodoImg(id);
 	}
 }

@@ -22,6 +22,7 @@ public class TodoRequest {
 	public static class UpdateRequest{
 		private String name;
 		private Boolean completed;
+		private MultipartFile file;
 	}
 	
 	@Setter
