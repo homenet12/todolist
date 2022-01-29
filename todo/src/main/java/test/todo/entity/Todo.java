@@ -57,18 +57,18 @@ public class Todo {
 	
 	public void update(TodoRequest.UpdateRequest todoRequest) {
 		setName(todoRequest.getName());
-		if(todoRequest.getCompleted() != null && todoRequest.getCompleted()) {
-			complete();
+		if(todoRequest.getCompleted() != null) {
+			setCompleted(todoRequest.getCompleted());
 		}
 		imgUpload(todoRequest.getFile());
 		this.updateAt = LocalDateTime.now();
 	}
 	
-	private void imgUpload(MultipartFile img) {
-		if(!img.isEmpty()) {
-			this.imgUrl = FileHelper.uploadImg(img);
-		}
+	private void setCompleted(Boolean completed) {
+		if(completed) complete();
+		else uncomplete();
 	}
+
 	
 	private void setName(String name) {
 		if(name != null && !name.isEmpty()) {
@@ -77,12 +77,21 @@ public class Todo {
 	}
 	
 	private void complete() {
-		if(!this.completed) {
-			this.completed = true;
-			this.completedAt = LocalDateTime.now();
-		}
+		this.completed = true;
+		this.completedAt = LocalDateTime.now();
+	}
+	
+	private void uncomplete() {
+		this.completed = false;
+		this.completedAt = null;
 	}
 
+	private void imgUpload(MultipartFile img) {
+		if(img != null && !img.isEmpty()) {
+			this.imgUrl = FileHelper.uploadImg(img);
+		}
+	}
+	
 	public void deleteImg() {
 		if(this.imgUrl != null) {
 			FileHelper.deleteImg(this.imgUrl);
