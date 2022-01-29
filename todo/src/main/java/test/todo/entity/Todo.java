@@ -32,6 +32,9 @@ public class Todo {
 	private LocalDateTime createdAt;
 	private LocalDateTime updateAt;
 	
+	@Column(length = 255)
+	private String imgUrl;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -67,5 +70,9 @@ public class Todo {
 			this.completed = true;
 			this.completedAt = LocalDateTime.now();
 		}
+	}
+	
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 }

@@ -5,8 +5,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import test.todo.common.FileHelper;
 import test.todo.dto.TodoListResponse;
 import test.todo.dto.TodoRequest.CreateRequest;
 import test.todo.dto.TodoRequest.Search;
@@ -35,7 +37,12 @@ public class TodoService {
 
 	@Transactional
 	public TodoResponse saveTodo(CreateRequest todoRequest) {
-		return new TodoResponse(todoRepository.save(Todo.createTodo(todoRequest.getName())));
+		Todo todo = Todo.createTodo(todoRequest.getName());
+		if(!todoRequest.getFile().isEmpty()) {
+			todo.setImgUrl(FileHelper.imgUpload(todoRequest.getFile()));
+		}
+		
+		return new TodoResponse(todoRepository.save(todo));
 	}
 
 	@Transactional

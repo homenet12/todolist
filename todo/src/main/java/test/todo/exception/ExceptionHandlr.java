@@ -18,7 +18,7 @@ public class ExceptionHandlr {
 		return new ExceptionResponse(HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(value = MethodArgumentNotValidException.class)
+	@ExceptionHandler(value = {MethodArgumentNotValidException.class, IllegalArgumentException.class})
 	public ExceptionResponse validation(Exception ex){
 		return new ExceptionResponse(HttpStatus.BAD_REQUEST);
 	}

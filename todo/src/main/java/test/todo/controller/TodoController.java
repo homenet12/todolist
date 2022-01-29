@@ -1,10 +1,16 @@
 package test.todo.controller;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +46,7 @@ public class TodoController {
 	
 	@PostMapping("/todos")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public TodoResponse saveTodo(@RequestBody @Valid TodoRequest.CreateRequest todoRequest){
+	public TodoResponse saveTodo(@Valid TodoRequest.CreateRequest todoRequest){
 		return todoService.saveTodo(todoRequest);
 	}
 	
@@ -54,5 +60,12 @@ public class TodoController {
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteTodo(@PathVariable Long id){
 		todoService.deleteTodo(id);
+	}
+	
+	@GetMapping(value = "/todos/{id}/img", produces = MediaType.IMAGE_JPEG_VALUE)
+	@ResponseStatus(value = HttpStatus.OK)
+	public byte[] getTodoImg(@PathVariable Long id) throws Exception{
+		String imgUrl = todoService.todoGetOne(id).getImgUrl();
+	    return IOUtils.toByteArray(new FileInputStream(imgUrl));
 	}
 }

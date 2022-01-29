@@ -4,6 +4,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +15,7 @@ public class TodoRequest {
 	public static class CreateRequest{
 		@NotBlank(message = "이름은 필수입니다.")
 		private String name;
+		private MultipartFile file;
 	}
 
 	@Getter @Setter
